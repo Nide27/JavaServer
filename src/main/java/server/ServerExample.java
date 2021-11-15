@@ -12,14 +12,59 @@ public class ServerExample {
         try {
             // create the server socket (we create on this computer a new socket on port 9999)
             ServerSocket serverSocket = new ServerSocket(9999);
+
+            while(true){
+                Socket clientSocket = serverSocket.accept();
+                new Thread(() -> {
+                    try {
+                        task(clientSocket);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
+
             // accept a client on this socket (blocks until connection is made)
-            Socket clientSocket = serverSocket.accept();
+            //Socket clientSocket = serverSocket.accept();
             // the output (what we send as response)
+            /*PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            // the input stream (what the clients send as request)
+            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+            String inputLine, outputLine;
+
+          *//*  while (true) {
+                accept a connection;
+                create a thread to deal with the client;
+            }*//*
+
+            while ((inputLine = in.readLine()) != null) {
+                // when there is something on the input
+                outputLine = inputLine + inputLine;
+                // we send it to the output
+                out.println(outputLine);
+                System.out.println("Request:" + inputLine);
+                if (outputLine.equals("Bye.Bye.")) {
+                    break;
+                }
+            }*/
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void task(Socket clientSocket) throws IOException {
+        try {
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
             // the input stream (what the clients send as request)
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
             String inputLine, outputLine;
+
+          /*  while (true) {
+                accept a connection;
+                create a thread to deal with the client;
+            }*/
 
             while ((inputLine = in.readLine()) != null) {
                 // when there is something on the input
@@ -31,8 +76,10 @@ public class ServerExample {
                     break;
                 }
             }
-        } catch (IOException e) {
+        }catch (IOException e) {
             e.printStackTrace();
         }
     }
 }
+
+
